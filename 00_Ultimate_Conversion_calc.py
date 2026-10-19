@@ -75,8 +75,8 @@ def num_check(question):
 # Convert Valid Units To The Correct Name
 def unit_names(question):
 
-    # list of possible units
-    possible_units = [
+    # list of valid units
+    valid_units = [
         ["mm", "mms", "MM", "MMS", "MILLIMETER", "MILLIMETRE", "MILLIMETERS", "MILLIMETRES", "millimeters", "Millimeters", "millimeter", "Millimeter", "millimetres", "Millimetres", "millimetre", "Millimetre" ],
         ["cm", "cms", "CM", "CMS", "CENTIMETER", "CENTIMETRE", "CENTIMETERS", "CENTIMETRES", "centimeters", "Centimeters", "centimeter", "Centimeter", "centimetres", "Centimetres", "centimetre", "Centimetre"],
         ["m", "M", "METERS", "METRES", "METRE", "METER", "meters", "Meters", "meter", "Meter", "metres", "Metres", "metre", "metres"],
@@ -84,10 +84,10 @@ def unit_names(question):
         ["ms", "MS", "MILLISECONDS", "MILLISECOND", "Milliseconds", "milliseconds", "Millisecond", "millisecond"],
         ["s", "S", "SECONDS", "SECOND", "SECS", "SEC", "seconds", "Seconds", "sec", "Sec", "Secs", "secs", "Second", "second"],
         ["min", "Min", "MINS", "MIN",  "minutes", "Minutes", "minute", "Minute", "MINUTE", "MINUTES"],
-        ["hr", "HR", "hrs", "Hrs", "HRS", "Hr", "hour", "Hour", "Hours", "hours", "HOURS", "HOUR"],
-        ["d", "D", "Days", "days", "Day", "day", "DAYS", "DAY"],
+        ["hrs", "HR", "hr", "Hrs", "HRS", "Hr", "hour", "Hour", "Hours", "hours", "HOURS", "HOUR"],
+        ["days", "Days", "Day", "day", "DAYS", "DAY"],
         ["w", "W", "Weeks", "weeks", "week", "Week", "WEEKS", "WEEK"],
-        ["y", "Y", "YEARS", "YEAR", "year", "Year", "Years", "years", "yr", "Yr", "YR", "yrs", "Yrs", "YRS"],
+        ["years", "Y", "YEARS", "YEAR", "y", "Year", "Years", "years", "yr", "Yr", "YR", "yrs", "Yrs", "YRS"],
         ["mg", "MG", "Mg", "mgs", "Mgs", "MGS", "MILLIGRAM", "MILLIGRAMS", "Milligrams", "milligrams", "Milligram", "milligram"],
         ["g", "G", "Grams", "grams", "Gram", "gram", "GRAMS", "GRAM"],
         ["kg", "KG", "Kg", "Kgs", "kgs", "KGS", "KILOGRAMS", "KILOGRAM", "kilogram", "Kilogram", "Kilograms", "kilograms"],
@@ -97,8 +97,9 @@ def unit_names(question):
 
     while True:
         response = input(question)
-        for item in possible_units:
-            if response in item:
+
+        for item in valid_units:
+            if response in [unit.lower() for unit in item]:
                 return item[0]
 
         else:
@@ -106,31 +107,24 @@ def unit_names(question):
 
 
 # Check user has entered valid units
-def unit_checker(possible_units):
-
-    # Possible Units
-
-    invalid_holder = []
-    to_unit = ""
-
+def unit_checker(valid_units):
     while True:
         from_unit = unit_names("Enter the unit you want to convert from: ")
 
-        for item in possible_units:
 
-            if from_unit in item:
+        # Unit checker
+        if from_unit in valid_units:
+            while True:
                 to_unit = unit_names("Enter the unit you want to convert to: ")
 
-                if to_unit in item:
+                if to_unit in valid_units:
                     return [from_unit, to_unit]
 
-
-        if len(invalid_holder) <= len(possible_units):
-         print("Please enter a valid unit")
+                else:
+                    print(f"Sorry, converting to '{to_unit}' is not possible.")
+                    break
         else:
-            print(f"Sorry, it is not possible to convert {to_unit} and {from_unit}")
-
-
+            print(f"Sorry, '{from_unit}' is not a valid unit.")
 
 # Main Routine Goes Here
 
@@ -157,8 +151,7 @@ time_dict = {
         "ms": 3600 * 1000,
         "s": 3600,
         "min": 60,
-        "h": 1,
-
+        "hrs": 1,
         "weeks": 1 / (24 * 7),
         "days": 1/24,
         "years": 1/ (24 * 365 + 6 +9/60)
@@ -220,5 +213,5 @@ while True:
     # Answer Statement
     print(f"There are {answer} {to_unit} in {amount} {from_unit} ")
 
-print("\nThank you for using Conversion Calculator.")
+print("\nThank you for using the Conversion Calculator.")
 
